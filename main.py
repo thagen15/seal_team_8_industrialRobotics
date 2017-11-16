@@ -23,7 +23,7 @@ def convertToWhiteBoard(x,y):
 def main():
 
     Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-    filename = askopenfilename(initialdir = '/home/thagen/Documents/Industrial Robotics/Pics') # show an "Open" dialog box and return the path to the selected file
+    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
     img = cv2.imread(filename)
 
     print('Creating pipeline')

@@ -109,15 +109,16 @@ class PictureToLine:
 
         file = open('robotPath.mod', 'w')
 
-
-        txt = 'MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
+        txt = 'PROC main()\n'
+        txt += '    MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
         for pair in pointPairs:
-            c1 = 'MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
-            c2 = 'MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
-            c3 = 'MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
+            c1 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
+            c2 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
+            c3 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
             txt += c1
             txt += c2
             txt += c3
+        txt += 'ENDPROC'
         file.write(txt)
         file.close()
 

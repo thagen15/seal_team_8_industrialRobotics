@@ -33,6 +33,6 @@ def main():
     pipeline = PictureToLine()
     print('Running pipeline')
     pointPairs = pipeline.process(img)
-
+    print pointPairs
 if __name__ == '__main__':
     main()

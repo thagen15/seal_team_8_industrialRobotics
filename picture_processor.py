@@ -11,6 +11,11 @@ constantBeta = "-30";
 constantGamma = "30";
 robConfig = str([0,0,0,0])
 extJoint = str([9E+09,9E+09,9E+09,9E+09,9E+09,9E+09])
+whiteboardWidth = 584
+whiteboardHeight = 431
+adjustedWidth = 558
+adjustedHeight = 406
+
 
 
 class PictureToLine:
@@ -21,8 +26,9 @@ class PictureToLine:
     def __init__(self):
         """initializes all values to presets or None if need to be set
         """
-        self.__resize_image_width = 640
-        self.__resize_image_height = 480
+        #HEIGHT AND WIDTH ARE THOSE OF THE WHITEBOARD (MM) - 1/2 INCH
+        self.__resize_image_width = adjustedWidth
+        self.__resize_image_height = adjustedHeight
         self.__resize_image_interpolation = cv2.INTER_CUBIC
 
         self.resize_image_output = None
@@ -100,12 +106,23 @@ class PictureToLine:
                 lineSegments +=1
 
         pointPairs.reverse
-        img = np.zeros((480,640,3), np.uint8)
-
+        img = np.zeros((whiteboardHeight,whiteboardWidth,3), np.uint8)
         for pair in pointPairs:
+            x1 = pair.getPoint1X()+12
+            y1 = pair.getPoint1Y()+12
+            x2 = pair.getPoint2X()+12
+            y2 = pair.getPoint2Y()+12
+            pair.setPoint1(x1,y1)
+            pair.setPoint2(x2,y2)
+            print pair
             cv2.line(img,pair.getPoint1(),pair.getPoint2(),(50,205,50),1)
             cv2.imshow('img',img)
             cv2.waitKey(1)
+
+        # for pair in pointPairs:
+        #     cv2.line(img,pair.getPoint1(),pair.getPoint2(),(50,205,50),1)
+        #     cv2.imshow('img',img)
+        #     cv2.waitKey(1)
         print "There are ",lineSegments," line segments in the picture"
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -116,7 +133,7 @@ class PictureToLine:
         txt += '    MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
         for pair in pointPairs:
             c1 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
-            c1 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            c2 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
             c2 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
             c3 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
             txt += c1

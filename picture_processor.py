@@ -9,6 +9,9 @@ constantZup = "10"
 constantAlpha = "30";
 constantBeta = "-30";
 constantGamma = "30";
+robConfig = str([0,0,0,0])
+extJoint = str([9E+09,9E+09,9E+09,9E+09,9E+09,9E+09])
+
 
 class PictureToLine:
     """
@@ -110,11 +113,12 @@ class PictureToLine:
         file = open('robotPath.mod', 'w')
 
         txt = 'PROC main()\n'
-        txt += '    MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
+        txt += '    MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
         for pair in pointPairs:
-            c1 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
-            c2 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
-            c3 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'], fine, tool0]\n';
+            c1 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            c1 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            c2 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
+            c3 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
             txt += c1
             txt += c2
             txt += c3

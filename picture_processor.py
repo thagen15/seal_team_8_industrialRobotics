@@ -128,17 +128,31 @@ class PictureToLine:
         cv2.destroyAllWindows()
 
         file = open('robotPath.mod', 'w')
+        i = 0
+        robTargets = []
+        txt = ''
 
-        txt = 'PROC main()\n'
-        txt += '    MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
         for pair in pointPairs:
-            c1 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
-            c2 = '    MoveL [[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
-            c2 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
-            c3 = '    MoveL [[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
-            txt += c1
-            txt += c2
-            txt += c3
+            point1_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            point1_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            robTargets.append('point_'+str(i)+'_clearance')
+            robTargets.append('point_'+str(i)+'_contact')
+            i+=1;
+            point2_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
+            point2_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            robTargets.append('point_'+str(i)+'_contact')
+            robTargets.append('point_'+str(i)+'_clearance')
+
+            txt += ('CONST robtarget '+point1_clearance)
+            txt += ('CONST robtarget '+point1_contact)
+            txt += ('CONST robtarget '+point2_contact)
+            txt += ('CONST robtarget '+point2_clearance)
+            i+=1
+
+        txt += '\nPROC main()\n'
+        txt += '    MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
+        for targets in robTargets:
+            txt += '    MoveL '+targets+',v1000,fine, \n'
         txt += 'ENDPROC'
         file.write(txt)
         file.close()

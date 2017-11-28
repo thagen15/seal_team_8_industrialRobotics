@@ -6,9 +6,10 @@ from PointPair import PointPair
 
 constantZ = "5"
 constantZup = "10"
-constantAlpha = "30";
-constantBeta = "-30";
-constantGamma = "30";
+constantAlpha = "0";
+constantBeta = "0";
+constantGamma = "1";
+constantZeta = "0";
 robConfig = str([0,0,0,0])
 extJoint = str([9E+09,9E+09,9E+09,9E+09,9E+09,9E+09])
 whiteboardWidth = 584
@@ -130,30 +131,38 @@ class PictureToLine:
         file = open('robotPath.mod', 'w')
         i = 0
         robTargets = []
-        txt = ''
+        txt = 'MODULE Module1\n'
 
         for pair in pointPairs:
-            point1_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
-            point1_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            point1_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
+            point1_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
             robTargets.append('point_'+str(i)+'_clearance')
             robTargets.append('point_'+str(i)+'_contact')
             i+=1;
-            point2_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
-            point2_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+', v1000, z0, tool0]\n';
+            point2_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
+            point2_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint2X())+',' +str(pair.getPoint2Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
             robTargets.append('point_'+str(i)+'_contact')
             robTargets.append('point_'+str(i)+'_clearance')
 
-            txt += ('CONST robtarget '+point1_clearance)
-            txt += ('CONST robtarget '+point1_contact)
-            txt += ('CONST robtarget '+point2_contact)
-            txt += ('CONST robtarget '+point2_clearance)
+            txt += ('    CONST robtarget '+point1_clearance)
+            txt += ('    CONST robtarget '+point1_contact)
+            txt += ('    CONST robtarget '+point2_contact)
+            txt += ('    CONST robtarget '+point2_clearance)
             i+=1
 
-        txt += '\nPROC main()\n'
-        txt += '    MoveL [[' +str(0)+',' +str(0)+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+'],' +robConfig+','+extJoint+',  v1000, z0, tool0]\n';
+        txt += '\n\n\n'
+        txt += '    PROC main()\n'
+        txt += '        Path_Draw;\n'
+        txt += '    ENDPROC\n'
+
+        txt += '    LOCAL PROC Path_Draw()\n'
+
         for targets in robTargets:
-            txt += '    MoveL '+targets+',v1000,fine, \n'
-        txt += 'ENDPROC'
+            txt += '        MoveL '+targets+',v1000,fine,MyTool\WObj:=Workobject_1;\n'
+        
+        txt += '    ENDPROC\n'
+        txt += 'ENDMODULE'
+
         file.write(txt)
         file.close()
 

@@ -6,10 +6,10 @@ from PointPair import PointPair
 
 constantZ = "5"
 constantZup = "10"
-constantAlpha = "0";
-constantBeta = "0.707106781";
-constantGamma = "0.707106781";
-constantZeta = "0";
+constantAlpha = "0.707106781";
+constantBeta = "0";
+constantGamma = "0";
+constantZeta = "0.707106781";
 robConfig = str([0,0,0,0])
 extJoint = str([9E+09,9E+09,9E+09,9E+09,9E+09,9E+09])
 whiteboardWidth = 584

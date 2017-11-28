@@ -132,7 +132,10 @@ class PictureToLine:
         i = 0
         robTargets = []
         txt = 'MODULE Module1\n'
-
+        txt += '    CONST robtarget calib_1:=[[0,0,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_2:=[[558,0,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_3:=[[558,406,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_4:=[[0,406,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         for pair in pointPairs:
             point1_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
             point1_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
@@ -152,9 +155,15 @@ class PictureToLine:
 
         txt += '\n\n\n'
         txt += '    PROC main()\n'
+        txt += '        Path_Calib;\n'
         txt += '        Path_Draw;\n'
         txt += '    ENDPROC\n'
-
+        txt += '    LOCAL PROC Path_Calib()\n'
+        txt += '        MoveL calib_1,v1000,fine,MyTool\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_2,v1000,fine,MyTool\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_3,v1000,fine,MyTool\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_4,v1000,fine,MyTool\WObj:=Workobject_1;\n'
+        txt += '    ENDPROC\n\n'
         txt += '    LOCAL PROC Path_Draw()\n'
 
         for targets in robTargets:

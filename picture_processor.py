@@ -4,19 +4,19 @@ import math
 from enum import Enum
 from PointPair import PointPair
 
-markerLength = 125
+markerLength = 122
 constantZ = str(markerLength)
-constantZup = str(markerLength + 5)
+constantZup = str(markerLength + 10)
 constantAlpha = "0";
 constantBeta = "0";
 constantGamma = "1";
 constantZeta = "0";
 robConfig = str([0,0,0,0])
 extJoint = '[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]'
-whiteboardWidth = 584
-whiteboardHeight = 431
-adjustedWidth = 558
-adjustedHeight = 406
+whiteboardWidth = 558
+whiteboardHeight = 406
+adjustedWidth = 533
+adjustedHeight = 368
 tool = 'GS25_ParallelGripper'
 speed = 'v500'
 
@@ -134,7 +134,7 @@ class PictureToLine:
         i = 0
         robTargets = []
         txt = 'MODULE MainModule\n'
-        txt += '    CONST jointtarget home:=[[0,40,10,0,40,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST jointtarget home:=[[-90,40,10,0,40,90],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_1:=[[25,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_2:=[[558,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_3:=[[558,406,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'

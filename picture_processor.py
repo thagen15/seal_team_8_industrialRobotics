@@ -4,19 +4,21 @@ import math
 from enum import Enum
 from PointPair import PointPair
 
-constantZ = "5"
-constantZup = "10"
-constantAlpha = "0.707106781";
+markerLength = 125
+constantZ = str(markerLength)
+constantZup = str(markerLength + 5)
+constantAlpha = "0";
 constantBeta = "0";
-constantGamma = "0";
-constantZeta = "0.707106781";
+constantGamma = "1";
+constantZeta = "0";
 robConfig = str([0,0,0,0])
-extJoint = str([9E+09,9E+09,9E+09,9E+09,9E+09,9E+09])
+extJoint = '[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]'
 whiteboardWidth = 584
 whiteboardHeight = 431
 adjustedWidth = 558
 adjustedHeight = 406
-
+tool = 'GS25_ParallelGripper'
+speed = 'v500'
 
 
 class PictureToLine:
@@ -132,10 +134,11 @@ class PictureToLine:
         i = 0
         robTargets = []
         txt = 'MODULE Module1\n'
-        txt += '    CONST robtarget calib_1:=[[0,0,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
-        txt += '    CONST robtarget calib_2:=[[558,0,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
-        txt += '    CONST robtarget calib_3:=[[558,406,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
-        txt += '    CONST robtarget calib_4:=[[0,406,10],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST jointtarget home:=[[0,40,10,0,40,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_1:=[[25,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_2:=[[558,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_3:=[[558,406,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_4:=[[25,406,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         for pair in pointPairs:
             point1_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
             point1_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
@@ -159,15 +162,17 @@ class PictureToLine:
         txt += '        Path_Draw;\n'
         txt += '    ENDPROC\n'
         txt += '    LOCAL PROC Path_Calib()\n'
-        txt += '        MoveL calib_1,v1000,fine,MyTool\WObj:=Workobject_1;\n'
-        txt += '        MoveL calib_2,v1000,fine,MyTool\WObj:=Workobject_1;\n'
-        txt += '        MoveL calib_3,v1000,fine,MyTool\WObj:=Workobject_1;\n'
-        txt += '        MoveL calib_4,v1000,fine,MyTool\WObj:=Workobject_1;\n'
+        txt += '        MoveAbsJ home,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_1,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_2,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_3,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_4,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_1,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
         txt += '    ENDPROC\n\n'
         txt += '    LOCAL PROC Path_Draw()\n'
 
         for targets in robTargets:
-            txt += '        MoveL '+targets+',v1000,fine,MyTool\WObj:=Workobject_1;\n'
+            txt += '        MoveL '+targets+','+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
         
         txt += '    ENDPROC\n'
         txt += 'ENDMODULE'

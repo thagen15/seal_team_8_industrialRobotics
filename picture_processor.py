@@ -100,7 +100,7 @@ class PictureToLine:
         pointPairs =[]
         lineSegments = 0
         if len(lines) != 0:
-            for i in range(1, len(lines[0])):
+            for i in range(0, len(lines[0])):
                 tmp = PictureToLine.Line(lines[0][i, 0][0], lines[0][i, 0][1],
                                 lines[0][i, 0][2], lines[0][i, 0][3])
 
@@ -133,7 +133,7 @@ class PictureToLine:
         file = open('robotPath.mod', 'w')
         i = 0
         robTargets = []
-        txt = 'MODULE Module1\n'
+        txt = 'MODULE MainModule\n'
         txt += '    CONST jointtarget home:=[[0,40,10,0,40,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_1:=[[25,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_2:=[[558,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'

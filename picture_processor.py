@@ -62,7 +62,7 @@ class PictureToLine:
         Returns:
             A numpy.ndarray of the new size.
         """
-        return cv2.resize(input, ((int)(width), (int)(height)), 0, 0, interpolation)
+        return cv2.flip(cv2.resize(input, ((int)(width), (int)(height)), 0, 0, interpolation), 1 )
 
 
     class Line:
@@ -173,7 +173,7 @@ class PictureToLine:
 
         for targets in robTargets:
             txt += '        MoveL '+targets+','+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
-        
+
         txt += '    ENDPROC\n'
         txt += 'ENDMODULE'
 

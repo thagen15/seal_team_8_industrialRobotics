@@ -6,7 +6,7 @@ from PointPair import PointPair
 
 markerLength = 122
 constantZ = str(markerLength)
-constantZup = str(markerLength + 10)
+constantZup = str(markerLength + 15)
 constantAlpha = "0";
 constantBeta = "0";
 constantGamma = "1";
@@ -19,7 +19,7 @@ adjustedWidth = 533
 adjustedHeight = 368
 tool = 'GS25_ParallelGripper'
 speed = 'v500'
-
+calSpeed = 'v80'
 
 class PictureToLine:
     """
@@ -126,9 +126,11 @@ class PictureToLine:
         #     cv2.line(img,pair.getPoint1(),pair.getPoint2(),(50,205,50),1)
         #     cv2.imshow('img',img)
         #     cv2.waitKey(1)
+        print ""
+        print "---SUCCESS---"
         print "There are ",lineSegments," line segments in the picture"
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        print "Your drawing code has been successfully generated to robotPath.mod"
+        print "Please copy the code into RobotStudio and auto-configure the targets."
 
         file = open('robotPath.mod', 'w')
         i = 0
@@ -136,9 +138,14 @@ class PictureToLine:
         txt = 'MODULE MainModule\n'
         txt += '    CONST jointtarget home:=[[-90,40,10,0,40,90],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_1:=[[25,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_1d:=[[25,25,'+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_2:=[[558,25,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_2d:=[[558,25,'+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_3:=[[558,406,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_3d:=[[558,406,'+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
         txt += '    CONST robtarget calib_4:=[[25,406,'+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+        txt += '    CONST robtarget calib_4d:=[[25,406,'+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],[0,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];\n'
+
         for pair in pointPairs:
             point1_clearance = 'point_'+str(i)+'_clearance:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZup+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
             point1_contact = 'point_'+str(i)+'_contact:=[[' +str(pair.getPoint1X())+',' +str(pair.getPoint1Y())+','+constantZ+'],['+constantAlpha+','+constantBeta+','+constantGamma+','+ constantZeta +'],' +robConfig+','+extJoint+'];\n'
@@ -164,21 +171,33 @@ class PictureToLine:
         txt += '    LOCAL PROC Path_Calib()\n'
         txt += '        MoveAbsJ home,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
         txt += '        MoveL calib_1,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
-        txt += '        MoveL calib_2,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
-        txt += '        MoveL calib_3,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
-        txt += '        MoveL calib_4,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
-        txt += '        MoveL calib_1,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_1d,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_1,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_2,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_2d,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_2,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_3,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_3d,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_3,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_4,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_4d,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_4,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+        txt += '        MoveL calib_1,'+calSpeed+',fine,'+tool+'\WObj:=Workobject_1;\n'
+
         txt += '    ENDPROC\n\n'
         txt += '    LOCAL PROC Path_Draw()\n'
 
         for targets in robTargets:
             txt += '        MoveL '+targets+','+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
 
+        txt += '        MoveAbsJ home,'+speed+',fine,'+tool+'\WObj:=Workobject_1;\n'
         txt += '    ENDPROC\n'
         txt += 'ENDMODULE'
 
         file.write(txt)
         file.close()
 
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
         return pointPairs

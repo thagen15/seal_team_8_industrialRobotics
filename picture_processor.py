@@ -4,7 +4,7 @@ import math
 from enum import Enum
 from PointPair import PointPair
 
-markerLength = 122
+markerLength = 134.5 #mm
 constantZ = str(markerLength)
 constantZup = str(markerLength + 15)
 constantAlpha = "0";
@@ -19,7 +19,7 @@ adjustedWidth = 533
 adjustedHeight = 368
 tool = 'GS25_ParallelGripper'
 speed = 'v500'
-calSpeed = 'v80'
+calSpeed = 'v100'
 
 class PictureToLine:
     """
@@ -131,6 +131,7 @@ class PictureToLine:
         print "There are ",lineSegments," line segments in the picture"
         print "Your drawing code has been successfully generated to robotPath.mod"
         print "Please copy the code into RobotStudio and auto-configure the targets."
+        print "Estimated Draw Time: ",lineSegments*0.0265," minutes"
 
         file = open('robotPath.mod', 'w')
         i = 0
